@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        body{
+            background-color: bisque;
+        }
+        .text{
+            max-width: 200px;
+            margin: 10px 15px 10px 15px;
+            color: rgb(136, 125, 100);
+            font-weight: 1000;
+        }
+        .img{
+            height: 200px;
+            width: 200px;
+            margin: 15px;
+            border-radius: 10px;
+            background-size: cover;
+        }
+        .root{
+            display: grid;
+            justify-content: center;
+            grid-template-rows: repeat(3,auto);
+            grid-template-columns: repeat(4,auto);
+            gap: 10px;
+        }
+        .card{
+            display: flex;
+            flex-direction: column;
+            width: fit-content;
+            height: fit-content;
+            align-items: center;
+            justify-content: center;
+            border-radius: 20px;
+            background-color: rgb(232, 226, 209);
+        }
+        
+        
+        .priceNcategory{
+            color: brown;
+            font-weight: bold;
+            font-size: larger;
+            margin: 0 auto 10px 15px;
+            display: flex;
+            
+        }
+    </style>
+
+</head>
+<body>
+    <div id="root" class="root"></div>
+<script>
+    const root = document.getElementById('root')
+    
+    async function fetchStore(){
+        const res = await fetch('https://fakestoreapi.com/products')
+        const ans = await res.json()
+        return ans
+               
+    }
+    async function getFetchStore(fetchStore){
+        const data = await fetchStore
+        
+        await data.forEach(
+            createElement
+            
+        );
+         
+    }
+    
+    function truncate(str,maxlength) {
+        if(str.length > maxlength){
+            return str.slice(0,maxlength-1)+'...'
+        } 
+        return str;
+    }
+    
+    function createElement(element){
+        const div = document.createElement('div')
+        const title = document.createElement('p')
+        const dscrptn = document.createElement('p')
+        const price = document.createElement('p')
+        const category = document.createElement('p')
+        const image = document.createElement('div')
+       
+        title.append(truncate(element.title,20))
+        dscrptn.append(truncate(element.description,100))
+        category.append('category: ')
+        category.append(element.category)
+        price.append('price: ')
+        price.append(element.price)
+        image.style.backgroundImage =`url(${element.image})`
+        
+        div.append(title)
+        div.append(image)
+        div.append(price)
+        div.append(dscrptn) 
+        div.append(category)
+        root.append(div)
+        console.log(element)
+        image.classList.add('img')
+        title.classList.add('text')
+        dscrptn.classList.add('text')
+        price.classList.add('priceNcategory')
+        category.classList.add('priceNcategory')
+        div.classList.add('card')
+    }
+    
+    
+    getFetchStore(fetchStore())
+</script>
+</body>
+</html>
